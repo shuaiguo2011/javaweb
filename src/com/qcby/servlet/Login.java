@@ -54,9 +54,6 @@ public class Login extends HttpServlet {
         	String json="{\"code\":0}";
 			response.getWriter().write(json);	
         }
-		
-		//String json="{\"account\":\""+account+"\",\"password\":\""+password+"\"}";
-		//response.getWriter().write(json);
 	}
 
 }
