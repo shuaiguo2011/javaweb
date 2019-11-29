@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<title>Qingcheng</title>
+	<link rel="stylesheet" href="source/css/mystyle.css" />
+	<script src="source/js/jquery.js"></script>
+	<script src="source/layer/layer.js"></script>
+</head>
+<body class="body_bg">
+	<div class="whole" id="whole">
+		<div class="title">
+			Please Enter Your New Info
+			<span><a href="login.html"><img src="source/images/login.png"/></a></span>
+		</div>
+		<form id="form1" class="form_box">
+			<div class="input_tit">Your Account</div>
+			<div class="input_box">
+				<input class="input_self" type="text" required name="account" id="account" />
+			</div>					
+			<div class="input_tit">Your Password</div>
+			<div class="input_box">
+				<input class="input_self" type="password" required name="password" id="password" />
+			</div>
+			<div class="input_tit">Comfirm Password</div>
+			<div class="input_box">
+				<input class="input_self" type="password" required name="com_password" id="com_password" />
+			</div>
+			<div class="finish_box">
+				<input class="finish_btn" type="submit"  id="finish" name="finish" value="Finish" />
+			</div>
+		</form>
+	</div>
+	<script>
+		$(function(){
+			//主体垂直方向居中显示
+			var win_height = $(window).height();
+			var who_height = $(".whole").height();
+			$('.whole').animate({'top':win_height/2-who_height/2+'px'},1000);
+			$(window).on('resize',function(){	
+				var win_height = $(window).height();
+				var who_height = $(".whole").height();
+				$('.whole').animate({'top':win_height/2-who_height/2+'px'},100);
+			});
+			//form表单提交
+			$('#form1').on('submit',function(e){
+				e.preventDefault();
+				var account = $('#account').val();
+				var password = $('#password').val();
+				var com_password = $('#com_password').val();
+				if(password.length<5||com_password.length<5){
+					layer.msg('密码必须大于6位');
+					$('#password').val("");
+					$('#com_password').val("");
+					return false;
+				}
+				if(password===com_password){
+					$.ajax({
+						url:"Register",
+						type:"post",
+						data:{
+							'account':account,
+							'password':password
+						},
+						dataType:"json",
+						success:function(data){
+							if(data.code==0){
+								layer.msg('账号已注册，请更换账号！');
+							}else{
+								$('#password').val("");
+								$('#com_password').val("");
+								layer.msg('账号注册成功！正在跳往登录页面......',function(){
+									window.location.href="login.html?account="+data.account+"&password="+data.password;
+								});
+								
+							}
+							$('#account').val("");							
+						}
+					})					
+				}else{
+					layer.msg('两次密码不一样');
+					$('#password').val("");
+					$('#com_password').val("");
+				}
+				
+				
+			})
+		})
+
+	</script>
+</body>
+</html>
