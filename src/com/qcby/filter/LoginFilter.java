@@ -39,13 +39,11 @@ public class LoginFilter implements Filter {
 		// place your code here
 		Object userId = ((HttpServletRequest)request).getSession().getAttribute("userId");
 		String requestURI = ((HttpServletRequest) request).getRequestURI();
-		System.out.println(requestURI);
-
+		//System.out.println(requestURI);
 		if(requestURI.equals("/javaweb/")||requestURI.equals("/javaweb/login.html")||requestURI.equals("/javaweb/Login")||requestURI.contains("/javaweb/source")) {	
 			
 		}else {
-			System.out.println(userId);
-			System.out.println(userId==null);
+			//System.out.println(userId);
 			if(userId==null) {
 				((HttpServletResponse) response).sendRedirect("login.html");
 				
