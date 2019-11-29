@@ -70,7 +70,9 @@
 							}else{
 								$('#password').val("");
 								$('#com_password').val("");
-								layer.msg('账号注册成功！正在跳往登录页面......',function(){
+								layer.msg('账号注册成功！正在跳往登录页面......',{
+									time:1000
+								},function(){
 									window.location.href="login.html?account="+data.account+"&password="+data.password;
 								});
 								

@@ -38,9 +38,18 @@ public class Index extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
-		response.setHeader("Content-type", "text/html;charset=UTF-8");  
-		String que_sql = "select * from t_news order by date DESC";
+		response.setHeader("Content-type", "text/html;charset=UTF-8"); 
+		String action = request.getParameter("action");
+		String search_title = request.getParameter("search_title");
+		String que_sql = "";
 		String [] columns = new String []{"id","title","author","description","date"};
+		if(action!=null) {
+			if(action.equals("search")) {
+				que_sql = "select * from t_news where title like '%"+search_title+"%'  order by date DESC";
+			}else if(action.equals("load")){
+				que_sql = "select * from t_news order by date DESC";
+			}
+		}
 		List<Map<String,String>> result = Db.find(que_sql, columns);
 		if(result.size()==0) {
 			String json="{\"code\":0}";		
@@ -72,7 +81,7 @@ public class Index extends HttpServlet {
 		String que_sql="";
 		if(action.equals("out")) {
 			String json="{\"code\":1}";
-        	request.getSession().removeAttribute("userId");
+        	request.getSession().removeAttribute("userId");	
 			response.getWriter().write(json);
 		}else {
 			if(action.equals("update_select")) {
@@ -96,6 +105,9 @@ public class Index extends HttpServlet {
 				}
 				else if(action.equals("update")) {
 					 que_sql = "update t_news set title='"+title+"' ,author='"+author+"',description='"+description+"',date='"+str_date+"' where id=\""+id+"\"";	
+				}
+				else if(action.equals("removeall")) {
+					 que_sql = "delete from t_news where id in ("+id+")";	
 				}
 				if(que_sql!="") {
 					Db.update(que_sql);
