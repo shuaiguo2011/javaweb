@@ -67,7 +67,6 @@ $("#add_form").on('submit',function(e){
 	e.preventDefault();
 	var id = $('#id').val();
 	var title = $('#title').val();
-	var author = $('#author').val();
 	var description = $('#description').val();
 	var action="";
 	if(action_flag==0){
@@ -83,7 +82,6 @@ $("#add_form").on('submit',function(e){
 				"action":action,
 				"id":id,
 				"title":title,
-				"author":author,
 				"description":description
 			},		
 			dataType:"text",
@@ -93,7 +91,6 @@ $("#add_form").on('submit',function(e){
 					$('.my_table>tbody').empty().append("<tr><td colspan='7'>无数据</td></tr>")
 				}else{
 					$('#title').val("");
-					$('#author').val("");
 					$('#description').val("")				
 					$('.my_table>tbody').empty();
 					//更新数据	
@@ -152,7 +149,6 @@ $(document).on('click','#modify',function(){
 			data = JSON.parse(data);
 			$('#id').val(data.result[0].id);
 			$('#title').val(data.result[0].title);
-			$('#author').val(data.result[0].author);
 			$('#description').val(data.result[0].description);
 			index_add_form =layer.open({
 				 type: 1,
@@ -164,7 +160,6 @@ $(document).on('click','#modify',function(){
 				 cancel: function(){ 
 					 $('#id').val("");
 					 $('#title').val("");
-					 $('#author').val("");
 					 $('#description').val("");   
 			     }
 

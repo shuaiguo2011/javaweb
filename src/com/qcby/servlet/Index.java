@@ -73,11 +73,12 @@ public class Index extends HttpServlet {
 		String action = request.getParameter("action");
 		String id = request.getParameter("id");
 		String title = request.getParameter("title");	
-		String author = request.getParameter("author");
+		Object author = request.getSession().getAttribute("userId");
 		String description = request.getParameter("description");
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String str_date = sdf.format(date);
+		System.out.println(str_date);
 		String que_sql="";
 		if(action.equals("out")) {
 			String json="{\"code\":1}";
