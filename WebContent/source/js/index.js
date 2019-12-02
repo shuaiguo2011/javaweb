@@ -8,6 +8,7 @@ $.ajax({
 	dataType:"text",
 	success:function(data){		
 		data = JSON.parse(data);
+		$("#cur_account").html(data.account);
 		if(data.code==0){
 			$('.my_table>tbody').empty().append("<tr><td colspan='7'>无数据</td></tr>")
 		}else{

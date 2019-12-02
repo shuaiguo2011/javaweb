@@ -41,6 +41,7 @@ public class Index extends HttpServlet {
 		response.setHeader("Content-type", "text/html;charset=UTF-8"); 
 		String action = request.getParameter("action");
 		String search_title = request.getParameter("search_title");
+		Object account = request.getSession().getAttribute("userId");
 		String que_sql = "";
 		String [] columns = new String []{"id","title","author","description","date"};
 		if(action!=null) {
@@ -52,12 +53,12 @@ public class Index extends HttpServlet {
 		}
 		List<Map<String,String>> result = Db.find(que_sql, columns);
 		if(result.size()==0) {
-			String json="{\"code\":0}";		
+			String json="{\"code\":0,\"account\":\""+account+"\"}";		
 			response.getWriter().write(json);			
 		}else { 
 			//List 转 JSONArray 再 JSONArray 转 String
 		    String jsonStr = JSONArray.fromObject(result).toString();			    
-			String json="{\"code\":1,\"result\":"+jsonStr+"}";
+			String json="{\"code\":1,\"account\":\""+account+"\",\"result\":"+jsonStr+"}";
 			response.getWriter().write(json);
 
 		}

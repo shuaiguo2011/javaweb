@@ -20,7 +20,9 @@
 		   <input type="text" class="form-control input-sm input" style="border: 1px solid #5cb85c;background: none;color: #5cb85c;" id="search_title" name="search_title" placeholder="请输入标题">	  
 		   <button type="submit" class="btn btn-success btn-sm" id="search_btn">查询</button>
 		</form>
+		
    		<button type="button" class="btn btn-warning btn-sm pull-right" id="out">退出</button>
+   		<span id="cur_account" class="pull-right" style="margin:6px 10px 0 0;"></span>
    	</div>
    	
     <div class="table-responsive" style="margin-top:20px;">
@@ -38,6 +40,18 @@
 	    <tbody>  
 	    </tbody>
 	  </table>
+	 
+	</div>
+	<div class="text-center">
+		 <ul class="pagination">
+		    <li class="disabled"><a href="#">&laquo;</a></li>
+		    <li class="active"><a href="#">1</a></li>
+		    <li><a href="#">2</a></li>
+		    <li><a href="#">3</a></li>
+		    <li><a href="#">4</a></li>
+		    <li><a href="#">5</a></li>
+		    <li><a href="#">&raquo;</a></li>
+		</ul>
 	</div>
 </div>
 <div class="col-sm-10 col-sm-offset-1" id="add_form" style="display:none;margin-top:20px;">
@@ -61,5 +75,6 @@
 	</form>
 </div>
 <script src="source/js/index.js"></script>
+<script src="source/js/pagination.js"></script>
 </body>
 </html>
