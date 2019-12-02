@@ -262,7 +262,8 @@ $('#search_form').on("submit",function(e){
 				//更新数据						
 				load(data.result);
 				layer.msg('查询成功！')					
-			}						
+			}	
+			$('#search_title').val('');
 		}
 	})
 })

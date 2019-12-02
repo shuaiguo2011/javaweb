@@ -79,7 +79,6 @@ public class Index extends HttpServlet {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String str_date = sdf.format(date);
-		System.out.println(str_date);
 		String que_sql="";
 		if(action.equals("out")) {
 			String json="{\"code\":1}";
