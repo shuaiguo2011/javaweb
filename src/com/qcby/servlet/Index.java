@@ -23,6 +23,7 @@ import net.sf.json.JSONArray;
 @WebServlet("/Index")
 public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final int pageSize = 5;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -41,14 +42,18 @@ public class Index extends HttpServlet {
 		response.setHeader("Content-type", "text/html;charset=UTF-8"); 
 		String action = request.getParameter("action");
 		String search_title = request.getParameter("search_title");
+		String pageIndex = request.getParameter("pageIndex");
 		Object account = request.getSession().getAttribute("userId");
 		String que_sql = "";
 		String [] columns = new String []{"id","title","author","description","date"};
 		if(action!=null) {
 			if(action.equals("search")) {
-				que_sql = "select * from t_news where title like '%"+search_title+"%'  order by date DESC";
+				que_sql = "select * from t_news where title like '%"+search_title+"%'  order by date DESC limit 0,"+pageSize;
 			}else if(action.equals("load")){
-				que_sql = "select * from t_news order by date DESC";
+				que_sql = "select * from t_news order by date DESC limit 0,"+pageSize;
+			}
+			else if(action.equals("page")){
+				que_sql = "select * from t_news order by date DESC limit "+(Integer.parseInt(pageIndex)-1)*4+","+pageSize;
 			}
 		}
 		List<Map<String,String>> result = Db.find(que_sql, columns);
@@ -113,7 +118,7 @@ public class Index extends HttpServlet {
 				if(que_sql!="") {
 					Db.update(que_sql);
 				}
-				String sql = "select * from t_news order by date DESC";
+				String sql = "select * from t_news order by date DESC limit 0,"+pageSize;
 				String [] columns = new String []{"id","title","author","description","date"};
 				List<Map<String,String>> result = Db.find(sql, columns);
 				if(result.size()==0) {
