@@ -1,32 +1,35 @@
 $(function(){
 	//点击下一页
-	$(".pagination li:last-child").on('click',function(){
+	$(document).on('click',".pagination li:last-child",function(){		
 		if($(".pagination li").filter(".active").next()[0]!==$(".pagination li:last-child")[0]){
-			pageLoad($(".pagination li").filter(".active").next().text());
+			var search_title = $('#search_title').val();
+			pageLoad($(".pagination li").filter(".active").next().text(),search_title);
 			$(".pagination li").filter(".active").removeClass('active').next().addClass('active');
 		}	
-		pageLoad($(this).text());
 	})
 	//点击上一页
-	$(".pagination li:first-child").on('click',function(){
+	$(document).on('click',".pagination li:first-child",function(){
 		if($(".pagination li").filter(".active").prev()[0]!==$(".pagination li:first-child")[0]){
-			pageLoad($(".pagination li").filter(".active").prev().text());
+			var search_title = $('#search_title').val();
+			pageLoad($(".pagination li").filter(".active").prev().text(),search_title);
 			$(".pagination li").filter(".active").removeClass('active').prev().addClass('active');
 		}
 	})
 	//点击任意一页
-	$(".pagination li").not('.pagination li:last-child').not('.pagination li:first-child').on('click',function(){
+	$(document).on('click',".pagination li:not(:first-child):not(:last-child)",function(){
 		$(".pagination li").removeClass('active');
 		$(this).addClass('active');
-		pageLoad($(this).text());
+		var search_title = $('#search_title').val();
+		pageLoad($(this).text(),search_title);
 	})
     //分页数据加载
-	var pageLoad = function(pageIndex){
+	var pageLoad = function(pageIndex,search_title){
 		$.ajax({
 			url:"Index",
 			type:"get",
 			data:{
 				"action":"page",
+				"search_title":search_title,
 				'pageIndex':pageIndex
 			},
 			dataType:"text",

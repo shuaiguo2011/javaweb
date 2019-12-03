@@ -23,7 +23,7 @@ import net.sf.json.JSONArray;
 @WebServlet("/Index")
 public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final int pageSize = 5;
+	private static final int pageSize = 10;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -45,25 +45,29 @@ public class Index extends HttpServlet {
 		String pageIndex = request.getParameter("pageIndex");
 		Object account = request.getSession().getAttribute("userId");
 		String que_sql = "";
+		String que_sql1 = "select * from t_news";
 		String [] columns = new String []{"id","title","author","description","date"};
 		if(action!=null) {
 			if(action.equals("search")) {
 				que_sql = "select * from t_news where title like '%"+search_title+"%'  order by date DESC limit 0,"+pageSize;
+				que_sql1 = "select * from t_news where title like '%"+search_title+"%'  order by date DESC";
 			}else if(action.equals("load")){
-				que_sql = "select * from t_news order by date DESC limit 0,"+pageSize;
+				que_sql = "select * from t_news order by date DESC limit 0,"+pageSize;								
 			}
 			else if(action.equals("page")){
-				que_sql = "select * from t_news order by date DESC limit "+(Integer.parseInt(pageIndex)-1)*4+","+pageSize;
+				que_sql = "select * from t_news  where title like '%"+search_title+"%' order by date DESC limit "+(Integer.parseInt(pageIndex)-1)*pageSize+","+pageSize;
 			}
 		}
 		List<Map<String,String>> result = Db.find(que_sql, columns);
+		List<Map<String,String>> result1 = Db.find(que_sql1, columns);
+		int pageCount = (int)Math.ceil(((float)result1.size()/pageSize));
 		if(result.size()==0) {
 			String json="{\"code\":0,\"account\":\""+account+"\"}";		
 			response.getWriter().write(json);			
 		}else { 
 			//List 转 JSONArray 再 JSONArray 转 String
 		    String jsonStr = JSONArray.fromObject(result).toString();			    
-			String json="{\"code\":1,\"account\":\""+account+"\",\"result\":"+jsonStr+"}";
+			String json="{\"code\":1,\"account\":\""+account+"\",\"pageCount\":\""+pageCount+"\",\"result\":"+jsonStr+"}";
 			response.getWriter().write(json);
 
 		}
@@ -85,6 +89,7 @@ public class Index extends HttpServlet {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String str_date = sdf.format(date);
 		String que_sql="";
+		String que_sql1 = "select * from t_news";
 		if(action.equals("out")) {
 			String json="{\"code\":1}";
         	request.getSession().removeAttribute("userId");	
@@ -121,13 +126,15 @@ public class Index extends HttpServlet {
 				String sql = "select * from t_news order by date DESC limit 0,"+pageSize;
 				String [] columns = new String []{"id","title","author","description","date"};
 				List<Map<String,String>> result = Db.find(sql, columns);
+				List<Map<String,String>> result1 = Db.find(que_sql1, columns);
+				int pageCount = (int)Math.ceil(((float)result1.size()/pageSize));
 				if(result.size()==0) {
 					String json="{\"code\":0}";		
 					response.getWriter().write(json);			
 				}else { 
 					//List 转 JSONArray 再 JSONArray 转 String
 				    String jsonStr = JSONArray.fromObject(result).toString();			    
-					String json="{\"code\":1,\"result\":"+jsonStr+"}";
+					String json="{\"code\":1,\"pageCount\":\""+pageCount+"\",\"result\":"+jsonStr+"}";
 					response.getWriter().write(json);
 				}
 			}	
