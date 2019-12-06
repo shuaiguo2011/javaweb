@@ -10,10 +10,11 @@ $.ajax({
 		data = JSON.parse(data);
 		$("#cur_account").html(data.account);
 		if(data.code==0){
-			$('.my_table>tbody').empty().append("<tr><td colspan='7'>无数据</td></tr>")
+			$('.my_table>tbody').empty().append("<tr><td colspan='7'>无数据</td></tr>");
+			$(".pagination").empty();
 		}else{
 			//更新数据	
-			load(data.result);			
+			load(data);			
 		}						
 	}
 })
@@ -89,13 +90,16 @@ $("#add_form").on('submit',function(e){
 			success:function(data){
 				data = JSON.parse(data);
 				if(data.code==0){
-					$('.my_table>tbody').empty().append("<tr><td colspan='7'>无数据</td></tr>")
+					$('.my_table>tbody').empty().append("<tr><td colspan='7'>无数据</td></tr>");
+					$(".pagination").empty();
 				}else{
 					$('#title').val("");
 					$('#description').val("")				
 					$('.my_table>tbody').empty();
 					//更新数据	
-					load(data.result);					
+					load(data);	
+					//清空输入框内容
+					$('#search_title').val('')
 				}
 			}
 		})	
@@ -121,11 +125,15 @@ $(document).on('click','#remove',function(){
 					data = JSON.parse(data);
 					if(data.code==0){
 						$('.my_table>tbody').empty().append("<tr><td colspan='7'>无数据</td></tr>");
+						$(".pagination").empty();
+						$("#checkbox_all").prop('checked',false);
 						layer.msg('删除成功,无数据!');
 					}else{													
 						$('.my_table>tbody').empty();
 						//更新数据						
-						load(data.result);
+						load(data);
+						//清空输入框内容
+						$('#search_title').val('')
 						layer.msg('删除成功！')								
 					}
 				}
@@ -191,13 +199,16 @@ $("#remove_all").on('click',function(){
 					success:function(data){
 						data = JSON.parse(data);
 						if(data.code==0){
-							$('.my_table>tbody').empty().append("<tr><td colspan='7'>无数据</td></tr>")
-							layer.msg('删除成功,无数据!');
+							$('.my_table>tbody').empty().append("<tr><td colspan='7'>无数据</td></tr>");
+							$(".pagination").empty();
 							$("#checkbox_all").prop('checked',false);
+							layer.msg('删除成功,无数据!');
 						}else{													
 							$('.my_table>tbody').empty();
 							//更新数据						
-							load(data.result);
+							load(data);
+							//清空输入框内容
+							$('#search_title').val('')
 							layer.msg('删除成功！')								
 						}
 					}
@@ -234,13 +245,22 @@ $(document).on('click','input:checkbox[name=checkbox_item]',function(){
 		$("#checkbox_all").prop('checked',false);
 	}
 })
-//加载数据
+//加载数据和分页
 var load = function(data){
-	for(var i in data){
-		$('.my_table>tbody').append("<tr><td><input type='checkbox' name='checkbox_item' /></td><td>"+data[i].id+"</td><td>"+data[i].title+"</td><td>"+data[i].author+"</td><td>"+data[i].description+"</td><td>"+data[i].date+"</td><td><button class='btn btn-info btn-xs' id='modify'>修改</button>&nbsp;<button class='btn btn-danger btn-xs'  id='remove'>删除</button></td></tr>")
+	//加载数据
+	for(var i in data.result){
+		$('.my_table>tbody').append("<tr><td><input type='checkbox' name='checkbox_item' /></td><td>"+data.result[i].id+"</td><td>"+data.result[i].title+"</td><td>"+data.result[i].author+"</td><td>"+data.result[i].description+"</td><td>"+data.result[i].date+"</td><td><button class='btn btn-info btn-xs' id='modify'>修改</button>&nbsp;<button class='btn btn-danger btn-xs'  id='remove'>删除</button></td></tr>")
 	}
+	//加载分页
+	$(".pagination").empty().append("<li><a href='#'>&laquo;</a></li>");
+	for(var i=0;i<data.pageCount;i++){			
+		$(".pagination").append("<li><a href='#'>" + (i+1) + "</a></li>");					
+	}
+	$(".pagination").append(" <li><a href='#'>&raquo;</a></li>");
+	$(".pagination li").eq(1).addClass('active');
+	//取消全选
+	$("#checkbox_all").prop('checked',false);
 }
-
 //查询
 $('#search_form').on("submit",function(e){
 	e.preventDefault();
@@ -256,14 +276,15 @@ $('#search_form').on("submit",function(e){
 		success:function(data){		
 			data = JSON.parse(data);
 			if(data.code==0){
-				$('.my_table>tbody').empty().append("<tr><td colspan='7'>无数据</td></tr>")
+				$('.my_table>tbody').empty().append("<tr><td colspan='7'>无数据</td></tr>");
+				$("#checkbox_all").prop('checked',false);
+				$(".pagination").empty();
 			}else{
 				$('.my_table>tbody').empty();
 				//更新数据						
-				load(data.result);
+				load(data);
 				layer.msg('查询成功！')					
 			}	
-			$('#search_title').val('');
 		}
 	})
 })
