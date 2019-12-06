@@ -23,7 +23,7 @@ import net.sf.json.JSONArray;
 @WebServlet("/Index")
 public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final int pageSize = 10;
+	private static final int pageSize = 8;
        
     /**
      * @see HttpServlet#HttpServlet()

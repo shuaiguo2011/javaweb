@@ -6,9 +6,11 @@
 	<title>Qingcheng</title>
 	<link rel="stylesheet" href="source/css/mystyle.css" />
 	<script src="source/js/jquery.js"></script>
-		<script src="source/layer/layer.js"></script>
+	<script src="source/layer/layer.js"></script>
+	<script src="source/js/grain.js"></script>
 </head>
 <body class="body_bg">
+<canvas id="cas" style="z-index: 0;position: absolute;" ></canvas>
 	<div class="whole" id="whole">
 		<div class="title">
 			Please Enter Your Info
@@ -29,60 +31,59 @@
 		</form>
 	</div>
 	<script>
-		$(function(){
-			//主体垂直方向居中显示
+	$(function(){
+		//主体垂直方向居中显示
+		var win_height = $(window).height();
+		var who_height = $(".whole").height();
+		$('.whole').animate({'top':win_height/2-who_height/2+'px'},1000);
+		$(window).on('resize',function(){	
 			var win_height = $(window).height();
 			var who_height = $(".whole").height();
-			$('.whole').animate({'top':win_height/2-who_height/2+'px'},1000);
-			$(window).on('resize',function(){	
-				var win_height = $(window).height();
-				var who_height = $(".whole").height();
-				$('.whole').animate({'top':win_height/2-who_height/2+'px'},100);
-			});
-			//form表单提交
-			$('#form1').on('submit',function(e){
-				e.preventDefault();
-				var account = $('#account').val();
-				var password = $('#password').val();							
-				$.ajax({
-					url:"Login",
-					type:"post",
-					data:{
-						'account':account,
-						'password':password
-					},
-					dataType:"json",
-					success:function(data){
-						if(data.code==0){
-							layer.msg('账号信息不存在！');
-						}else{							
-							layer.msg('登录成功！正在进入.....',{
-								  time: 1000 
-							},function(){
-								window.location.href="index.html";
-							});
-							
-						}
-						$('#account').val("");
-						$('#password').val("");						
+			$('.whole').animate({'top':win_height/2-who_height/2+'px'},100);
+		});
+		//form表单提交
+		$('#form1').on('submit',function(e){
+			e.preventDefault();
+			var account = $('#account').val();
+			var password = $('#password').val();							
+			$.ajax({
+				url:"Login",
+				type:"post",
+				data:{
+					'account':account,
+					'password':password
+				},
+				dataType:"json",
+				success:function(data){
+					if(data.code==0){
+						layer.msg('账号信息不存在！');
+					}else{							
+						layer.msg('登录成功！正在进入.....',{
+							  time: 1000 
+						},function(){
+							window.location.href="index.html";
+						});
+						
 					}
-				})					
-		
-			})
-			//注册成功后，登录
-			var cur_href = window.location.href;
-			var para,account,password;
-			if(cur_href.indexOf("?")!=-1&&cur_href.indexOf("&")!=-1){
-				 para = cur_href.split('?')[1];
-				 account = para.split("&")[0].split("=")[1];
-				 password = para.split("&")[1].split("=")[1];
-			}			
-			if(account&&password){
-				 $('#account').val(account);
-				 $('#password').val(password);
-			}
-		})
+					$('#account').val("");
+					$('#password').val("");						
+				}
+			})					
 
+		})
+		//注册成功后，登录
+		var cur_href = window.location.href;
+		var para,account,password;
+		if(cur_href.indexOf("?")!=-1&&cur_href.indexOf("&")!=-1){
+			 para = cur_href.split('?')[1];
+			 account = para.split("&")[0].split("=")[1];
+			 password = para.split("&")[1].split("=")[1];
+		}			
+		if(account&&password){
+			 $('#account').val(account);
+			 $('#password').val(password);
+		}
+	})
 	</script>
 </body>
 </html>
