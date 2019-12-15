@@ -1,0 +1,27 @@
+@charset "UTF-8";
+*{
+	margin:0;
+	padding:0;
+}
+.my_table thead th:last-child{
+	width:100px;
+}
+.my_table thead th:first-child,.my_table thead th:nth-child(2){
+	width:40px;
+}
+.my_table thead th:nth-child(4){
+	width:100px;
+}
+.my_table thead th:nth-last-child(2){
+	width:200px;
+}
+
+ .input::-webkit-input-placeholder {
+    color: #5cb85c;
+}
+.input:-moz-placeholder {
+    color: #5cb85c;
+}
+.input:-ms-input-placeholder {
+    color: #5cb85c;
+}
